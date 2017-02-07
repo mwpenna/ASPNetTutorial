@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using ASPNetCoreWebApiTutorial.Models;
 using Raven.Client;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Host.SystemWeb;
+using Raven.Client.Document;
 
 namespace ASPNetCoreWebApiTutorial.Repository
 {
@@ -16,8 +13,19 @@ namespace ASPNetCoreWebApiTutorial.Repository
 
         public void Add(Contacts item)
         {
-            // ContactList.Add(item);
-            this.RavenSession.SaveChanges();
+            using (IDocumentStore store = new DocumentStore
+            {
+                Url = "http://localhost:8081/",
+                DefaultDatabase = "Contacts"
+            })
+            {
+                store.Initialize();
+                using (IDocumentSession session = store.OpenSession())
+                {
+                    session.Store(item);
+                    session.SaveChanges();
+                }
+            }
         }
 
         public Contacts Find(string key)
@@ -42,7 +50,7 @@ namespace ASPNetCoreWebApiTutorial.Repository
         public void Update(Contacts item)
         {
             var itemToUpdate = ContactList.SingleOrDefault(r => r.MobilePhone == item.MobilePhone);
-            if(itemToUpdate != null)
+            if (itemToUpdate != null)
             {
                 itemToUpdate.FirstName = item.FirstName;
                 itemToUpdate.LastName = item.LastName;
@@ -54,11 +62,6 @@ namespace ASPNetCoreWebApiTutorial.Repository
                 itemToUpdate.DateOfBirth = item.DateOfBirth;
                 itemToUpdate.AnniversaryDate = item.AnniversaryDate;
             }
-        }
-
-        private IDocumentSession RavenSession
-        {
-            get { return HttpContext.Current.GetOwinContext().Get<IDocumentSession>(); }
         }
     }
 }
