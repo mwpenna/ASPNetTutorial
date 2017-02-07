@@ -7,6 +7,7 @@ namespace ASPNetCoreWebApiTutorial.Models
 {
     public class Contacts
     {
+        public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public bool IsFamilyMember { get; set; }
