@@ -45,7 +45,7 @@ namespace ASPNetCoreWebApiTutorial.Controllers
                 return BadRequest("Contacts cannot be null");
             }
             ContactsRepo.Add(item);
-            return CreatedAtRoute("GetById", new { Controller = "contacts", id = item.MobilePhone }, item);
+            return CreatedAtRoute("GetById", new { id = item.MobilePhone }, item);
         }
 
         [Route("id/{id}")]
