@@ -23,7 +23,7 @@ namespace ASPNetCoreWebApiTutorial.Controllers
             return ContactsRepo.GetAll();
         }
 
-        [Route("id/{id}")]
+        [Route("id/{id}", Name = "GetById")]
         [HttpGet]
         public IHttpActionResult GetById(string id)
         {
@@ -45,8 +45,7 @@ namespace ASPNetCoreWebApiTutorial.Controllers
                 return BadRequest("Contacts cannot be null");
             }
             ContactsRepo.Add(item);
-            //return CreatedAtRoute("id/", new { Controller = "Contacts", id = item.MobilePhone }, item);
-            return Ok();
+            return CreatedAtRoute("GetById", new { Controller = "contacts", id = item.MobilePhone }, item);
         }
 
         [Route("id/{id}")]
