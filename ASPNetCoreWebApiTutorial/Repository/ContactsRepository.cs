@@ -24,6 +24,8 @@ namespace ASPNetCoreWebApiTutorial.Repository
                 {
                     session.Store(item);
                     session.SaveChanges();
+                    string guidId = session.Advanced.GetDocumentId(item);
+                    
                 }
             }
         }
